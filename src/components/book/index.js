@@ -49,8 +49,8 @@ class Book extends Component {
       imageUrl,
       title,
       authors,
-      state,
-      switchState,
+      shelf,
+      switchShelf,
       options } = this.props;
 
     return (
@@ -60,7 +60,7 @@ class Book extends Component {
             style={{ width: width, height: height, backgroundImage: imageUrl }}>
           </div>
           <div className="book-shelf-changer">
-            <Select value={state} switchState={switchState}>
+            <Select value={shelf} switchShelf={switchShelf}>
               {options.map(option => (
                 <Option
                   key={option.value}

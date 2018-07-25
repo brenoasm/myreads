@@ -7,16 +7,16 @@ const propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
-  switchState: PropTypes.func
+  switchShelf: PropTypes.func
 };
 
 const defaultProps = {
-  switchState: () => {},
+  switchShelf: () => {},
   value: null
 }
 
-const Select = ({ children, value, switchState }) => (
-  <select value={value} onChange={(event) => switchState(event.target.value)}>
+const Select = ({ children, value, switchShelf }) => (
+  <select value={value} onChange={(event) => switchShelf(event.target.value)}>
     {children}
   </select>
 );
