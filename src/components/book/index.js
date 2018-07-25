@@ -1,32 +1,74 @@
 import React, { Component } from 'react';
 
+import Select from 'components/select';
+import Option from 'components/select-option';
+
+import { READING, WANT_TO_READ, READ, NONE } from 'utils/book-states';
+
 class Book extends Component {
   static defaultProps = {
       height: 193,
       width: 128,
       imageUrl: 'http://via.placeholder.com/350x150',
       title: '',
-      authors: ''
+      authors: '',
+      options: [
+        {
+          text: 'Move to...',
+          value: null,
+          disabled: true,
+        },
+        {
+          text: 'Currently reading',
+          value: READING,
+          disabled: false,
+        },
+        {
+          text: 'Want to read',
+          value: WANT_TO_READ,
+          disabled: false,
+        },
+        {
+          text: 'Read',
+          value: READ,
+          disabled: false,
+        },
+        {
+          text: 'None',
+          value: NONE,
+          disabled: false,
+        }
+      ],
   }
 
   render() {
 
-    const { width, height, imageUrl, title, authors } = this.props;
+    const {
+      width,
+      height,
+      imageUrl,
+      title,
+      authors,
+      state,
+      switchState,
+      options } = this.props;
 
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" 
+          <div className="book-cover"
             style={{ width: width, height: height, backgroundImage: imageUrl }}>
           </div>
           <div className="book-shelf-changer">
-            <select>
-              <option value="move" disabled>Move to...</option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
-            </select>
+            <Select value={state} switchState={switchState}>
+              {options.map(option => (
+                <Option
+                  key={option.value}
+                  value={option.value}
+                  selected={option.selected}
+                  text={option.text} />
+              ))}
+            </Select>
           </div>
         </div>
         <div className="book-title">{title}</div>

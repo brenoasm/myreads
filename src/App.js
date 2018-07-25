@@ -1,11 +1,12 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 // import * as BooksAPI from './BooksAPI'
-import Bookshelf from 'components/bookshelf';  
+import Bookshelf from 'components/bookshelf';
 
-import { CURRENTLY_READING, WANT_TO_READ, READ } from 'utils/book-states';
+import { READING, WANT_TO_READ, READ, NONE } from 'utils/book-states';
 
 import './App.css';
+import Book from './components/book';
 
 class BooksApp extends React.Component {
   state = {
@@ -14,13 +15,13 @@ class BooksApp extends React.Component {
         title: 'To Kill a Mockingbird',
         authors: 'Harper Lee',
         imageUrl: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")',
-        state: CURRENTLY_READING
+        state: READING
       },
       {
         title: "Ender's Game",
         authors: 'Orson Scott Card',
         imageUrl: 'url("http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api")',
-        state: CURRENTLY_READING
+        state: READING
       },
       {
         title: "1776",
@@ -55,13 +56,20 @@ class BooksApp extends React.Component {
     ]
   }
 
-  getBooksFromState(state) {
+  switchState(book, newState = NONE) {
     const { books } = this.state;
 
-    return books.filter(book => book.state === state);
+    books.splice(books.findIndex(b => b.title === book.title), 1, {
+      ...book,
+      state: newState
+    });
+
+    this.setState({ books });
   }
 
   render() {
+    const { books } = this.state;
+
     return (
       <div className="app">
         <Route exact path='/' render={() => (
@@ -71,9 +79,42 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Bookshelf title='Currently Reading' books={this.getBooksFromState(CURRENTLY_READING)} />
-                <Bookshelf title='Want to Read' books={this.getBooksFromState(WANT_TO_READ)} />
-                <Bookshelf title='Read' books={this.getBooksFromState(READ)} />
+                <Bookshelf title='Currently Reading'>
+                  {books.filter(book => book.state === READING).map(book => (
+                    <li key={book.title}>
+                      <Book
+                        title={book.title}
+                        authors={book.authors}
+                        imageUrl={book.imageUrl}
+                        state={book.state}
+                        switchState={newState => this.switchState(book, newState)} />
+                    </li>
+                  ))}
+                </Bookshelf>
+                <Bookshelf title='Want to Read'>
+                  {books.filter(book => book.state === WANT_TO_READ).map(book => (
+                    <li key={book.title}>
+                      <Book
+                        title={book.title}
+                        authors={book.authors}
+                        imageUrl={book.imageUrl}
+                        state={book.state}
+                        switchState={newState => this.switchState(book, newState)} />
+                    </li>
+                  ))}
+                </Bookshelf>
+                <Bookshelf title='Read'>
+                  {books.filter(book => book.state === READ).map(book => (
+                    <li key={book.title}>
+                      <Book
+                        title={book.title}
+                        authors={book.authors}
+                        imageUrl={book.imageUrl}
+                        state={book.state}
+                        switchState={newState => this.switchState(book, newState)} />
+                    </li>
+                  ))}
+                </Bookshelf>
               </div>
             </div>
             <div className="open-search">
@@ -86,14 +127,14 @@ class BooksApp extends React.Component {
             <div className="search-books-bar">
               <Link className='close-search' to='/'>Close</Link>
               <div className="search-books-input-wrapper">
-                
+
                   {/* NOTES: The search from BooksAPI is limited to a particular set of search terms.
                   You can find these search terms here:
                   https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
 
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms. */}
-                
+
                 <input type="text" placeholder="Search by title or author"/>
 
               </div>
