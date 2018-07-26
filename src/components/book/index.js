@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Select from 'components/select';
 import Option from 'components/select-option';
 
-import { READING, WANT_TO_READ, READ, NONE } from 'utils/book-states';
+import { READING, WANT_TO_READ, READ, NONE } from 'utils/shelves';
 
 class Book extends Component {
   static defaultProps = {
