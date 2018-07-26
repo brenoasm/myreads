@@ -1,4 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
+const propTypes = {
+  children: PropTypes.arrayOf(PropTypes.node),
+  title: PropTypes.string
+}
 
 const Bookshelf = ({ children, title }) => (
   <div className="bookshelf">
@@ -10,5 +16,7 @@ const Bookshelf = ({ children, title }) => (
     </div>
   </div>
 );
+
+Bookshelf.propTypes = propTypes;
 
 export default Bookshelf;

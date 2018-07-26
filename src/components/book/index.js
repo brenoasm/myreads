@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 
 import Select from 'components/select';
 import Option from 'components/select-option';
 
 import { READING, WANT_TO_READ, READ, NONE } from 'utils/shelves';
+
+const propTypes = {
+  width: Proptypes.number,
+  height: Proptypes.number,
+  imageUrl: Proptypes.string,
+  authors: Proptypes.arrayOf(Proptypes.string),
+  title: Proptypes.string.isRequired,
+  switchShelf: Proptypes.func.isRequired,
+  shelf({ shelf }) {
+    return ([READING, WANT_TO_READ, READ, NONE].indexOf(shelf) !== -1) || (shelf === '') ? null : new Error();
+  }
+}
 
 class Book extends Component {
   static defaultProps = {
@@ -12,36 +25,38 @@ class Book extends Component {
       imageUrl: 'http://via.placeholder.com/350x150',
       title: '',
       authors: '',
-      options: [
-        {
-          text: 'Move to...',
-          value: null,
-          disabled: true,
-        },
-        {
-          text: 'Currently reading',
-          value: READING,
-          disabled: false,
-        },
-        {
-          text: 'Want to read',
-          value: WANT_TO_READ,
-          disabled: false,
-        },
-        {
-          text: 'Read',
-          value: READ,
-          disabled: false,
-        },
-        {
-          text: 'None',
-          value: NONE,
-          disabled: false,
-        }
-      ],
+      shelf: '',
   }
 
   render() {
+
+    const options = [
+      {
+        text: 'Move to...',
+        value: null,
+        disabled: true,
+      },
+      {
+        text: 'Currently reading',
+        value: READING,
+        disabled: false,
+      },
+      {
+        text: 'Want to read',
+        value: WANT_TO_READ,
+        disabled: false,
+      },
+      {
+        text: 'Read',
+        value: READ,
+        disabled: false,
+      },
+      {
+        text: 'None',
+        value: NONE,
+        disabled: false,
+      }
+    ];
 
     const {
       width,
@@ -50,20 +65,19 @@ class Book extends Component {
       title,
       authors,
       shelf,
-      switchShelf,
-      options } = this.props;
+      switchShelf } = this.props;
 
     return (
       <div className="book">
         <div className="book-top">
           <div className="book-cover"
-            style={{ width: width, height: height, backgroundImage: imageUrl }}>
+            style={{ width: width, height: height, backgroundImage: `url(${ imageUrl })` }}>
           </div>
           <div className="book-shelf-changer">
             <Select value={shelf} switchShelf={switchShelf}>
-              {options.map(option => (
+              {options.map((option, index) => (
                 <Option
-                  key={option.value}
+                  key={`${option.value}-${index}`}
                   value={option.value}
                   selected={option.selected}
                   text={option.text} />
@@ -76,6 +90,8 @@ class Book extends Component {
       </div>
     );
   }
-};
+}
+
+Book.propTypes = propTypes;
 
 export default Book;
