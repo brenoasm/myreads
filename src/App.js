@@ -1,5 +1,4 @@
 import React from "react";
-import { withRouter } from "react-router";
 import { Route, Link, Switch } from "react-router-dom";
 import Bookshelf from "components/bookshelf";
 import { READING, WANT_TO_READ, READ, NONE } from "utils/shelves";
@@ -119,9 +118,8 @@ class BooksApp extends React.Component {
                   <div>
                     <Bookshelf title="Currently Reading">
                       {books
-                        .filter(book => book.shelf === READING)
-                        .map(book => (
-                          <li key={`${book.id}-${book.shelf}-${Math.random()}`}>
+                        .filter(book => book.shelf === READING).map((book, index) => (
+                          <li key={`${book.id}-${book.shelf}-${index}`}>
                             <Book
                               title={book.title}
                               authors={book.authors}
@@ -136,9 +134,8 @@ class BooksApp extends React.Component {
                     </Bookshelf>
                     <Bookshelf title="Want to Read">
                       {books
-                        .filter(book => book.shelf === WANT_TO_READ)
-                        .map(book => (
-                          <li key={`${book.id}-${book.shelf}-${Math.random()}`}>
+                        .filter(book => book.shelf === WANT_TO_READ).map((book, index) => (
+                          <li key={`${book.id}-${book.shelf}-${index}`}>
                             <Book
                               title={book.title}
                               authors={book.authors}
@@ -152,8 +149,8 @@ class BooksApp extends React.Component {
                         ))}
                     </Bookshelf>
                     <Bookshelf title="Read">
-                      {books.filter(book => book.shelf === READ).map(book => (
-                        <li key={`${book.id}-${book.shelf}-${Math.random()}`}>
+                      {books.filter(book => book.shelf === READ).map((book, index)=> (
+                        <li key={`${book.id}-${book.shelf}-${index}`}>
                           <Book
                             title={book.title}
                             authors={book.authors}
@@ -218,4 +215,4 @@ class BooksApp extends React.Component {
   }
 }
 
-export default withRouter(BooksApp);
+export default BooksApp;
